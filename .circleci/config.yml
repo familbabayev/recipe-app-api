@@ -36,5 +36,5 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            cd circle_dj_pg_demo
+            cd app
             python manage.py test
