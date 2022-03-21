@@ -3,8 +3,8 @@ version: 2.1
 jobs:
   tests:
     docker:
-      - image: circleci/python:3.9
-      - image: circleci/postgres:14-alpine
+      - image: cimg/python:3.9
+      - image: cimg/postgres:14.1.0
         environment:
           POSTGRES_USER: example
           POSTGRES_PASSWORD: example
