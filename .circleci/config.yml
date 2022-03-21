@@ -1,33 +1,40 @@
-version: 2.1
-
+version: 2
 jobs:
-  tests:
+  build:
     docker:
       - image: cimg/python:3.9
+        environment:
+          DB_HOST: localhost
+          DB_NAME: postgres
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          DB_PORT: 5432
+
       - image: cimg/postgres:14.1
         environment:
-          POSTGRES_USER: example
-          POSTGRES_PASSWORD: example
-          POSTGRES_DB: example
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+    working_directory: ~/app
+
     steps:
       - checkout
-      - run: sudo chown -R circleci:circleci /usr/local/bin
-      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.9/site-packages
-      - restore_cache:
-          key: deps9-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
-          name: Install Dependencies
+          name: install dependencies
           command: |
-            pip install --user -r requirements.txt
-      - save_cache:
-          key: deps9-{{ .Branch }}-{{ checksum "requirements.txt" }}
-          paths:
-            - ".venv"
-            - "/usr/local/bin"
-            - "/usr/local/lib/python3.9/site-packages"
-      - run: python manage.py test
-
-workflows:
-  main:
-    jobs:
-      - tests
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - run:
+          name: migrate and collectstatic
+          command: |
+            . venv/bin/activate
+            cd circle_dj_pg_demo
+            python manage.py collectstatic --no-input
+            python manage.py migrate --no-input
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            cd circle_dj_pg_demo
+            python manage.py test
