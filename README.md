@@ -10,9 +10,10 @@ I build this project based on Udemy with the purpose of studying. (Not completed
 ![Flake](https://img.shields.io/badge/flake8-PEP8-brightgreen?style=for-the-badge)
 
 ## Features
-- Token based Register/Login
+- Token based Custom Register/Login
 - View and Add Tags
 - ... (more to come)
+
 ## Installation
 
 1. Clone this repo
